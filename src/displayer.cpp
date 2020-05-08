@@ -27,6 +27,11 @@ Displayer::Displayer(ros::NodeHandle & nh, ros::NodeHandle nh_private) : nh_(nh)
 
   cmap_ = cv::Mat(1, 256, CV_8UC3);
   seismic_cmap(cmap_);
+
+  // Dynamic reconfigure
+  dynamic_reconfigure_callback_ = boost::bind(&Displayer::reconfigureCallback, this, _1, _2);
+  server_.reset(new dynamic_reconfigure::Server<dvs_displayer::dvs_displayerConfig>(nh_private));
+  server_->setCallback(dynamic_reconfigure_callback_);
 }
 
 
@@ -149,15 +154,20 @@ void Displayer::eventsCallback(const dvs_msgs::EventArray::ConstPtr& msg)
     gray_image += scale * on_events;
     gray_image -= scale * off_events;
 
-    // Use a colormap from OpenCV
+    // Use a colormap
     cv::Mat cm_img;
-    // Colormaps from OpenCV
-    //cv::applyColorMap(gray_image, cm_img, cv::COLORMAP_JET );
-
-    // Use a custom colormap
+    if (event_colormap_idx_ >=0 && event_colormap_idx_ <12)
+    {
+      // Colormaps from OpenCV
+      cv::applyColorMap(gray_image, cm_img, event_colormap_idx_ );
+    }
+    else
+    {
+      // Use a custom colormap
       cv::Mat gray_image3ch;
       cv::cvtColor(gray_image, gray_image3ch, CV_GRAY2BGR);
       cv::LUT(gray_image3ch, cmap_, cm_img);
+    }
 
     // alpha-blending
     const double alpha = 0.5;
@@ -175,6 +185,11 @@ void Displayer::eventsCallback(const dvs_msgs::EventArray::ConstPtr& msg)
 void Displayer::seismic_cmap(cv::Mat& lut)
 {
   dvs_displayer::seismic_cmap(lut);
+}
+
+void Displayer::reconfigureCallback(dvs_displayer::dvs_displayerConfig &config, uint32_t level)
+{
+  event_colormap_idx_ = config.Event_colormap;
 }
 
 } // namespace

@@ -7,6 +7,7 @@ At this point, the visualizer can read events and frames from a DAVIS (event mes
 - Added a parameter `display_method` in the launch file `display_monocular.launch` to select between grayscale and red-blue event image.
 - Added capability to read grayscale frame and plot red-blue events on top.
 - Added a custom red-blue colormap ("seismic" from matplotlib).
+- Added dynamic reconfigure, for interaction during execution.
 
 
 ### Dependencies
@@ -61,5 +62,10 @@ In another terminal play the bag with the event data:
 Then, in another terminal play run the visualizer node:
 	
 	roslaunch dvs_displayer display_monocular.launch
+	
+In another terminal open the dynamic reconfigure and play around with the parameters in the window named `dvs_displayer_one`
+	
+	rosrun rqt_reconfigure rqt_reconfigure
 
 End the program execution with `Ctrl + C` keyboard shortcut. 
+

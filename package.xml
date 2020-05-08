@@ -14,6 +14,7 @@
   <depend>dvs_msgs</depend>
   <depend>cv_bridge</depend>
   <depend>image_transport</depend>
+  <depend>dynamic_reconfigure</depend>
 
   <export>
   </export>

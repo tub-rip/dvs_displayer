@@ -5,6 +5,10 @@
 #include <dvs_msgs/EventArray.h>
 #include <opencv2/core/core.hpp>
 
+// Dynamic reconfigure
+#include <dynamic_reconfigure/server.h>
+#include <dvs_displayer/dvs_displayerConfig.h>
+
 namespace dvs_displayer
 {
 
@@ -37,6 +41,12 @@ private:
   void seismic_cmap(cv::Mat& lut);
   cv::Mat cmap_; // custom colormap
 
+  // Dynamic reconfigure
+  void reconfigureCallback(dvs_displayer::dvs_displayerConfig &config, uint32_t level);
+  boost::shared_ptr<dynamic_reconfigure::Server<dvs_displayer::dvs_displayerConfig> > server_;
+  dynamic_reconfigure::Server<dvs_displayer::dvs_displayerConfig>::CallbackType dynamic_reconfigure_callback_;
+
+  int event_colormap_idx_;
 };
 
 } // namespace
