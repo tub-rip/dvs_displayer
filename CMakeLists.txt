@@ -10,6 +10,7 @@ find_package(OpenCV REQUIRED)
 
 # Make the executable
 cs_add_executable(${PROJECT_NAME}
+  src/custom_cmaps.cpp
   src/displayer.cpp
   src/displayer_node.cpp
 )

@@ -6,6 +6,8 @@ At this point, the visualizer can read events and frames from a DAVIS (event mes
 
 - Added a parameter `display_method` in the launch file `display_monocular.launch` to select between grayscale and red-blue event image.
 - Added capability to read grayscale frame and plot red-blue events on top.
+- Added a custom red-blue colormap ("seismic" from matplotlib).
+
 
 ### Dependencies
 

@@ -1,4 +1,5 @@
 #include "dvs_displayer/displayer.h"
+#include "dvs_displayer/custom_cmaps.h"
 #include <cv_bridge/cv_bridge.h>
 
 namespace dvs_displayer {
@@ -23,6 +24,9 @@ Displayer::Displayer(ros::NodeHandle & nh, ros::NodeHandle nh_private) : nh_(nh)
   image_transport::ImageTransport it_(nh_);
   image_sub_ = it_.subscribe("image", 1, &Displayer::imageCallback, this);
   image_pub_ = it_.advertise("event_image", 1);
+
+  cmap_ = cv::Mat(1, 256, CV_8UC3);
+  seismic_cmap(cmap_);
 }
 
 
@@ -148,7 +152,12 @@ void Displayer::eventsCallback(const dvs_msgs::EventArray::ConstPtr& msg)
     // Use a colormap from OpenCV
     cv::Mat cm_img;
     // Colormaps from OpenCV
-    cv::applyColorMap(gray_image, cm_img, cv::COLORMAP_JET );
+    //cv::applyColorMap(gray_image, cm_img, cv::COLORMAP_JET );
+
+    // Use a custom colormap
+      cv::Mat gray_image3ch;
+      cv::cvtColor(gray_image, gray_image3ch, CV_GRAY2BGR);
+      cv::LUT(gray_image3ch, cmap_, cm_img);
 
     // alpha-blending
     const double alpha = 0.5;
@@ -161,6 +170,11 @@ void Displayer::eventsCallback(const dvs_msgs::EventArray::ConstPtr& msg)
   }
 
   image_pub_.publish(cv_image.toImageMsg());
+}
+
+void Displayer::seismic_cmap(cv::Mat& lut)
+{
+  dvs_displayer::seismic_cmap(lut);
 }
 
 } // namespace

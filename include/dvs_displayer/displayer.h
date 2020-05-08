@@ -34,6 +34,9 @@ private:
     GRAYSCALE, RED_BLUE
   } display_method_;
 
+  void seismic_cmap(cv::Mat& lut);
+  cv::Mat cmap_; // custom colormap
+
 };
 
 } // namespace
