@@ -2,9 +2,10 @@
 
 Bare minimum event processing in ROS C++.
 
-At this point, the visualizer only reads event messages and displays them as a (published) image.
+At this point, the visualizer can read events and frames from a DAVIS (event messages and image messages from two topics) and displays them as a (published) image.
 
 - Added a parameter `display_method` in the launch file `display_monocular.launch` to select between grayscale and red-blue event image.
+- Added capability to read grayscale frame and plot red-blue events on top.
 
 ### Dependencies
 
