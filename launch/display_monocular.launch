@@ -1,0 +1,14 @@
+<launch>
+  <!-- process events -->
+  <node name="dvs_displayer_one" pkg="dvs_displayer" type="dvs_displayer" output="screen">
+    <remap from="events" to="/dvs/events" />
+    <remap from="event_image" to="event_image" />
+  </node>
+
+
+  <!-- display using rqt_image_view -->
+  <node name="image_view_left" pkg="rqt_image_view" type="rqt_image_view">
+  	<remap from="image" to="event_image"/>
+  </node>
+
+</launch>
