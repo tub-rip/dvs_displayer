@@ -69,3 +69,9 @@ In another terminal open the dynamic reconfigure and play around with the parame
 
 End the program execution with `Ctrl + C` keyboard shortcut. 
 
+
+### TO DO:
+- Display events using a fixed number of them (currently we are displaying the events as arranged in messages)
+- Display events using a fixed time interval
+- Allow interaction, to change the number of events or the size of the time slice
+- Add visualization of time surfaces

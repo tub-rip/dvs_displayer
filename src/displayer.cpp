@@ -169,9 +169,26 @@ void Displayer::eventsCallback(const dvs_msgs::EventArray::ConstPtr& msg)
       cv::LUT(gray_image3ch, cmap_, cm_img);
     }
 
-    // alpha-blending
-    const double alpha = 0.5;
-    cv::addWeighted( cv_image.image, alpha, cm_img, 1.-alpha, 0., cv_image.image);
+    // Fusion mode: blending or masking (pixel replacement)?
+    if (blend_enabled_)
+    {
+      // alpha-blending
+      cv::addWeighted( cv_image.image, blend_alpha_, cm_img, 1.-blend_alpha_, 0., cv_image.image);
+    }
+    else
+    {
+      // Pixel replacement
+      for (int ir=0; ir < cv_image.image.rows; ir++)
+      {
+        for (int ic=0; ic < cv_image.image.cols; ic++)
+        {
+          if(gray_image.at<uint8_t>(ir,ic) != 128)
+          {
+            cv_image.image.at<cv::Vec3b>(ir,ic) = cm_img.at<cv::Vec3b>(ir,ic);
+          }
+        }
+      }
+    }
 
   }
   else
@@ -190,6 +207,8 @@ void Displayer::seismic_cmap(cv::Mat& lut)
 void Displayer::reconfigureCallback(dvs_displayer::dvs_displayerConfig &config, uint32_t level)
 {
   event_colormap_idx_ = config.Event_colormap;
+  blend_enabled_ = config.Blending;
+  blend_alpha_ = config.Blend_alpha;
 }
 
 } // namespace

@@ -47,6 +47,8 @@ private:
   dynamic_reconfigure::Server<dvs_displayer::dvs_displayerConfig>::CallbackType dynamic_reconfigure_callback_;
 
   int event_colormap_idx_;
+  bool blend_enabled_;
+  double blend_alpha_;
 };
 
 } // namespace
