@@ -79,6 +79,17 @@ void Displayer::eventsCallback(const dvs_msgs::EventArray::ConstPtr& msg)
     cv_image.header.stamp = msg->events[msg->events.size()/2].ts;
   }
 
+  // Per-pixel event histograms
+  cv::Mat on_events  = cv::Mat::zeros(msg->height, msg->width, CV_8U);
+  cv::Mat off_events = cv::Mat::zeros(msg->height, msg->width, CV_8U);
+  for (const dvs_msgs::Event& ev : msg->events)
+  {
+    if (ev.polarity == true)
+      on_events.at<uint8_t>(ev.y, ev.x)++;
+    else
+      off_events.at<uint8_t>(ev.y, ev.x)++;
+  }
+
   if (display_method_ == GRAYSCALE)
   {
     cv_image.encoding = "mono8";
@@ -93,17 +104,6 @@ void Displayer::eventsCallback(const dvs_msgs::EventArray::ConstPtr& msg)
     {
       // Create image
       cv_image.image = cv::Mat(msg->height, msg->width, CV_8U, cv::Scalar(128));
-    }
-
-    // Per-pixel event histograms
-    cv::Mat on_events  = cv::Mat::zeros(msg->height, msg->width, CV_8U);
-    cv::Mat off_events = cv::Mat::zeros(msg->height, msg->width, CV_8U);
-    for(const dvs_msgs::Event& ev : msg->events)
-    {
-      if (ev.polarity == true)
-        on_events.at<uint8_t>(ev.y, ev.x)++;
-      else
-        off_events.at<uint8_t>(ev.y, ev.x)++;
     }
 
     // Scale image to use the full range [0,255]
@@ -133,12 +133,26 @@ void Displayer::eventsCallback(const dvs_msgs::EventArray::ConstPtr& msg)
       cv_image.image = cv::Mat(msg->height, msg->width, CV_8UC3, cv::Scalar(255,255,255));
     }
 
-    // Just red or blue over white background
-    for(const dvs_msgs::Event& ev : msg->events)
-    {
-      cv_image.image.at<cv::Vec3b>(ev.y, ev.x) =
-      (ev.polarity == true ? cv::Vec3b(255, 0, 0) : cv::Vec3b(0, 0, 255));
-    }
+    // Scale image to use the full range [0,255]
+    // (using the same scaling factor for ON and OFF events)
+    double max_on, max_off, dummy;
+    cv::minMaxLoc(on_events, &dummy, &max_on);
+    cv::minMaxLoc(off_events, &dummy, &max_off);
+    const double max_abs_val = std::max(max_on, max_off);
+    const double scale = 127 / max_abs_val;
+    // Image of balance of polarities
+    cv::Mat gray_image = cv::Mat(msg->height, msg->width, CV_8U, cv::Scalar(128));
+    gray_image += scale * on_events;
+    gray_image -= scale * off_events;
+
+    // Use a colormap from OpenCV
+    cv::Mat cm_img;
+    // Colormaps from OpenCV
+    cv::applyColorMap(gray_image, cm_img, cv::COLORMAP_JET );
+
+    // alpha-blending
+    const double alpha = 0.5;
+    cv::addWeighted( cv_image.image, alpha, cm_img, 1.-alpha, 0., cv_image.image);
 
   }
   else
