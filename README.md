@@ -2,7 +2,9 @@
 
 Bare minimum event processing in ROS C++.
 
-At this point, the visualizer only reads event messages and displays them as a (published) grayscale image.
+At this point, the visualizer only reads event messages and displays them as a (published) image.
+
+- Added a parameter `display_method` in the launch file `display_monocular.launch` to select between grayscale and red-blue event image.
 
 ### Dependencies
 

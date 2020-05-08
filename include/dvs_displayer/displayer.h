@@ -23,6 +23,12 @@ private:
 
   // Publishers
   image_transport::Publisher image_pub_;
+
+  enum DisplayMethod
+  {
+    GRAYSCALE, RED_BLUE
+  } display_method_;
+
 };
 
 } // namespace
