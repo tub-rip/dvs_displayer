@@ -1,0 +1,9 @@
+repositories:
+  catkin_simple:
+    type: git
+    url: https://github.com/catkin/catkin_simple.git
+    version: master
+  rpg_dvs_ros:
+    type: git
+    url: https://github.com/uzh-rpg/rpg_dvs_ros.git
+    version: master
