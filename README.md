@@ -27,12 +27,12 @@ The task consists of building a simple visualizer that can read events and frame
 ### Solution
 
 This repository has approximately one commit per question in the [problem statement](https://drive.google.com/file/d/1YJuOIG2zOKnvFksZ7xKJYTK5PKNv4Gf-/view) (the first 8 commits):
-- [Add parameter in launch file to display events in red and blue](c66aab349d8b8b2c2bda93e758b55295f9003230)
-- [Add subscriber to read grayscale images. Plot red-blue events overlaid](1ccf8805a2da77585cc2d608da06f1b1849ee551)
-- [Add an OpenCV colormap to visualize events](5cb65e46e968547056d22f904a2fee1283ddaecd)
-- [Add custom colormap](c2adf8ddb7717f31f36580b26ebda91e822546f8)
-- [Add first time Dynamic Reconfigure of parameters](bef3f3c0131c6fa4d805fa3139d409b4c7fd9545)
-- [Dynamic reconfigure of alpha blending](ea7d3668e658a544d3bfbf62abe0c08d6d50c33e)
+- [Add parameter in launch file to display events in red and blue](c66aab3)
+- [Add subscriber to read grayscale images. Plot red-blue events overlaid](1ccf880)
+- [Add an OpenCV colormap to visualize events](5cb65e4)
+- [Add custom colormap](c2adf8d)
+- [Add first time Dynamic Reconfigure of parameters](bef3f3c)
+- [Dynamic reconfigure of alpha blending](ea7d366)
 
 
 ## Dependencies
